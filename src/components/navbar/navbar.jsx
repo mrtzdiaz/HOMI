@@ -16,7 +16,7 @@ const Navbar = function () {
                         ['Ingresos', '/html/ingresos.html'],
                         ['Egresos', '/html/egresos.html']
                     ].map(([name, url]) => {
-                        const state = (location.href.includes(url)) ? "text-yellow-400" : "text-white"
+                        const state = (location.href.includes(url)) ? "text-yellow-400" : "text-white hover:text-yellow-400"
                         return (
                             <strong key={url}>
                                 <a key={name} href={`..${url}`} className={state}>{name}</a>
