@@ -44,7 +44,7 @@ const TablaMateriaPrima = function () {
                     <MateriaPrima nombre='Daniel' costo='100' unidad='pza' almacen='1' />
                 </div>
             </div>
-            <div className={`${visibility} flex flex-col w-80 mt-20 border-2 border-black bg-gray-100 rounded-lg absolute`}>
+            <div className={`${visibility} flex flex-col w-80 mt-20 border-2 border-black bg-gray-100 rounded-lg absolute z-20`}>
                 <div className='relative w-full bg-black p-2 text-center'>
                     <h1 className='text-white font-bold'>Agregar Producto</h1>
                     <button onClick={handleModalForm} className='absolute top-0 right-0'>
@@ -70,6 +70,7 @@ const TablaMateriaPrima = function () {
                     <input className='mr-5 rounded-lg p-2' type="number" placeholder='100.00' />
                 </div>
             </div>
+            <div className={`${visibility} bg-gray-100 absolute inset-0  opacity-50 z-10`}></div>
         </div>
     )
 }
