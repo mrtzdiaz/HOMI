@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import '../index.css'
 import Navbar from '../components/navbar/navbar';
@@ -9,7 +8,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <section>
         <Navbar />
-        <div className='text-center min-h-18 bg-black text-3xl text-white [text-shadow:_2.5px_2.5px_teal]'>
+        <div className='mt-20 min-h-18 text-center text-5xl text-blueH [text-shadow:_2.5px_2.5px_black]'>
             <strong>Costos Básicos</strong>
         </div>
         <TablaMateriaPrima/>
