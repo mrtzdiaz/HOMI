@@ -101,8 +101,8 @@ const TablaMateriaPrima = function () {
     }
 
     return (
-        <div className='flex justify-center my-20 drop-shadow-2xl'>
-            <div className='table w-11/12 md:w-9/12 text-center bg-white'>
+        <div className='flex justify-center my-20'>
+            <div className='table w-11/12 md:w-9/12 text-center bg-white shadow-2xl'>
                 <div className='table-header-group'>
                     <div className='table-row grid grid-cols-10 h-10 font-bold text-white bg-black rounded-t-lg'>
                         <div className='table-cell sm:hidden place-content-center col-span-8'>Productos</div>
