@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 const TablaMateriaPrima = function () {
 
-    let costosBasicos = JSON.parse(localStorage.getItem("productosBasicos"));
+    let costosBasicos = localStorage.getItem("productosBasicos") != null ? JSON.parse(localStorage.getItem("productosBasicos")) : [];
 
     //----------------------------------- ESTADOS ----------------------------------------
 
@@ -122,10 +122,16 @@ const TablaMateriaPrima = function () {
                         </div>
                     </div>
                 </div>
-                    {
+                    {   
+                        
+                        localStorage.getItem("productosBasicos") != null ?
+                        
                         JSON.parse(localStorage.getItem("productosBasicos")).map(produco => {
                             return (<MateriaPrima key={produco.nombre} id={produco.id} nombre={produco.nombre} costo={produco.costo} unidad={produco.unidad} almacen={produco.almacen} edit={handleTypeForm} />)
                         })
+                        :
+                        console.log("saludos")
+                    
                     }
             </div>
 

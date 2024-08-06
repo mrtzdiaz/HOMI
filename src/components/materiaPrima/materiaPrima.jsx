@@ -3,9 +3,9 @@ const MateriaPrima = function ({id, nombre, costo, unidad, almacen, edit}) {
     return (
         <div className='table-row group/row grid grid-cols-10 h-10 odd:bg-gray-100 even:bg-gray-50 hover:bg-sky-100'>
             <div className='table-cell col-span-8 sm:col-span-3 place-content-center'>{nombre}</div>
-            <div className='product_cell_responsive'>${precio}</div>
-            <div className='product_cell_responsive'>{unidad}</div>
-            <div className='product_cell_responsive'>{almacen}</div>
+            <div className='basic_product_cell_responsive'>${precio}</div>
+            <div className='basic_product_cell_responsive'>{unidad}</div>
+            <div className='basic_product_cell_responsive'>{almacen}</div>
             <div className='table-cell col-span-2 sm:col-span-1 place-content-center'>
                 <div className="invisible flex justify-center group-hover/row:visible">
                 <button className="group/edit flex items-center justify-center hover:bg-black rounded-xl w-11/12 md:w-10/12 lg:w-7/12" id={id} onClick={edit}>
