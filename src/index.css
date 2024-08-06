@@ -5,8 +5,16 @@
     @apply table-cell hidden sm:block place-content-center;
 }
 
-.product_cell_responsive{
+.basic_product_cell_responsive{
     @apply hidden sm:block table-cell col-span-2 place-content-center;
+}
+
+.product_cell_responsive{
+    @apply hidden sm:block table-cell col-span-1 place-content-center;
+}
+
+.info_product_cell{
+    @apply table-cell col-span-1 place-content-center;
 }
 
 @tailwind utilities;
