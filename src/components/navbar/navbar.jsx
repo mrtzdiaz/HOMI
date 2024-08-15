@@ -10,7 +10,7 @@ const Navbar = function () {
     
     
     return (
-        <header className="sticky top-0">
+        <header className="sticky top-0 z-50">
             <nav className="flex flex-row justify-between items-center min-h-20 bg-blackH">
                 <div className="ml-5">
                     <a href="../index.html">
