@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-const Productos = function ({ id, nombre, costo, distribuidor, tienda, ventaFinal, almacen }) {
+const Productos = function ({ nombre, distribuidor, tienda, ventaFinal, almacen, fijos }) {
 
     //Función para colocar formato de dinero
     const money = (numero) => { return Number.parseFloat(numero).toFixed(2) }
@@ -23,6 +23,21 @@ const Productos = function ({ id, nombre, costo, distribuidor, tienda, ventaFina
         changeShowInfo(!showInfo);
     }
 
+    const [costo, setCosto] = useState(0);
+
+    //Get Object of Productos from storage
+    const recetasJSON = localStorage.getItem("recetas");
+    let recetas = recetasJSON ? JSON.parse(recetasJSON) : [];
+
+    useEffect(() => {
+        let acc = 0;
+        recetas.map(({producto, costo, cantidad}) => {
+            if(nombre === producto){
+                acc += costo * cantidad;
+            }
+        });
+        setCosto(acc);
+    }, []);
 
     return (
         <div className="odd:bg-gray-100 even:bg-gray-50 hover:bg-sky-100">
@@ -48,11 +63,11 @@ const Productos = function ({ id, nombre, costo, distribuidor, tienda, ventaFina
                 <div className='table-row group/row grid grid-cols-1 h-28 font-bold'>
                     <div className="table m-2 border border-black rounded">
                         <div className="table-header-group bg-blackH text-white">
-                            <InfoRow primera="Indirecto 30%" segunda="Ganancia" tercera="Fijos" />
+                            <InfoRow primera={`Indirecto ${fijos}%`} segunda="Ganancia" tercera="Fijos" />
                         </div>
-                        <InfoRow primera="Tercero" segunda="$50.00" tercera="$15.00">text-redH</InfoRow>
-                        <InfoRow primera="Tienda" segunda="$50.00" tercera="$15.00">text-yellowH</InfoRow>
-                        <InfoRow primera="Final" segunda="$50.00" tercera="$15.00">text-blueH</InfoRow>
+                        <InfoRow primera="Tercero" segunda={`$${money(distribuidor * 100 / (100 + fijos))}`} tercera={`$${money(distribuidor * fijos / (100 + fijos))}`}>text-redH</InfoRow>
+                        <InfoRow primera="Tienda" segunda={`$${money(tienda * 100 / (100 + fijos))}`} tercera={`$${money(tienda * fijos / (100 + fijos))}`}>text-yellowH</InfoRow>
+                        <InfoRow primera="Final" segunda={`$${money(ventaFinal * 100 / (100 + fijos))}`} tercera={`$${money(ventaFinal * fijos / (100 + fijos))}`}>text-blueH</InfoRow>
                     </div>
                 </div>
                 <button className="my-1 p-1 rounded-lg bg-blackH text-white font-bold">
