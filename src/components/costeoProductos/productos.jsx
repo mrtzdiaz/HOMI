@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 
-const Productos = function ({ nombre, distribuidor, tienda, ventaFinal, almacen, fijos }) {
-
+const Productos = function ({ nombre, distribuidor, tienda, ventaFinal, almacen, fijos, editFunction}) {
     //Función para colocar formato de dinero
     const money = (numero) => { return Number.parseFloat(numero).toFixed(2) }
 
@@ -22,13 +21,13 @@ const Productos = function ({ nombre, distribuidor, tienda, ventaFinal, almacen,
     const handleShowInfo = function () {
         changeShowInfo(!showInfo);
     }
-
-    const [costo, setCosto] = useState(0);
-
+    
     //Get Object of Productos from storage
     const recetasJSON = localStorage.getItem("recetas");
     let recetas = recetasJSON ? JSON.parse(recetasJSON) : [];
-
+    
+    //Use State y Effect para calcular el costo total
+    const [costo, setCosto] = useState(0);
     useEffect(() => {
         let acc = 0;
         recetas.map(({producto, costo, cantidad}) => {
@@ -70,7 +69,7 @@ const Productos = function ({ nombre, distribuidor, tienda, ventaFinal, almacen,
                         <InfoRow primera="Final" segunda={`$${money(ventaFinal * 100 / (100 + fijos))}`} tercera={`$${money(ventaFinal * fijos / (100 + fijos))}`}>text-blueH</InfoRow>
                     </div>
                 </div>
-                <button className="my-1 p-1 rounded-lg bg-blackH text-white font-bold">
+                <button className="my-1 p-1 rounded-lg bg-blackH text-white font-bold" name={nombre} onClick={(e) => {editFunction(e)}}>
                     Editar
                 </button>
             </div>

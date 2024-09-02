@@ -1,26 +1,24 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-const AddProducto = function ({ state }) {
+const AddProducto = function ({ state, form, receta }) {
 
     const [preciosVenta, setPreciosVenta] = useState([0, 0, 0]); //State of array of user's prices
     const [porcentajeFijos, setPorcentajeFijos] = useState(0); //State of pecentage of money allocated
     const [costo, setCosto] = useState(0);
+    const [listaIngredientes, setListaIngredientes] = useState()
+
+    //State for handle the function of AddProducto window
+    const [step, setStep] = useState(false);
+    const showStep = step ? '-translate-x-full' : '';
+    const handleStep = (event) => {
+        event.preventDefault();
+        setStep(!step);
+    }
 
     //Get Object of Ingredients from storage
     const costosBasicos = localStorage.getItem("productosBasicos");
     let ingredientes = costosBasicos ? JSON.parse(costosBasicos) : [];
-    
-    const [listaIngredientes, setListaIngredientes] = useState()
-    
-    useEffect(() => {
-        const tmpLista = ingredientes.map(({ nombre, costo }) => {
-            const nombreIngrediente = nombre.split(" ").join('');
-            return { nombre: nombreIngrediente, cantidad: 0, costo: Number(costo) }
-        });
-        setListaIngredientes(tmpLista)
-    }, []);
-
 
     //Get Object of Productos from storage
     const productosJSON = localStorage.getItem("productos");
@@ -30,13 +28,6 @@ const AddProducto = function ({ state }) {
     const recetasJSON = localStorage.getItem("recetas");
     let recetas = recetasJSON ? JSON.parse(recetasJSON) : [];
 
-    //State for handle the function of AddProducto window
-    const [step, setStep] = useState(false);
-    const showStep = step ? '-translate-x-full' : '';
-    const handleStep = (event) => {
-        event.preventDefault();
-        setStep(!step);
-    }
 
     //Function to get the values with the user's prices
     const calculoGanancia = function (event) {
@@ -58,24 +49,25 @@ const AddProducto = function ({ state }) {
         const nombre = event.target.name;
         const cantidad = Number(event.target.value);
         const tmpLista = listaIngredientes
-         tmpLista.forEach((ingrediente) => {
-             if (ingrediente.nombre === nombre) {
-                 ingrediente.cantidad = cantidad;
-             }
-         })
-         const suma = tmpLista.reduce((acc, ingrediente) => {
-             return acc + ingrediente.cantidad * ingrediente.costo;
-         }, 0);
-         
-         setCosto(parseFloat(suma).toFixed(2));
-         setListaIngredientes(tmpLista);
+        tmpLista.forEach((ingrediente) => {
+            if (ingrediente.nombre === nombre) {
+                ingrediente.cantidad = cantidad;
+            }
+        })
+        const suma = tmpLista.reduce((acc, ingrediente) => {
+            return acc + ingrediente.cantidad * ingrediente.costo;
+        }, 0);
+
+        setCosto(parseFloat(suma).toFixed(2));
+        setListaIngredientes(tmpLista);
     }
 
     //Function to save product name, prices, percent and stock
     const saveProducto = function (event) {
+        event.preventDefault();
         const input = event.target;
         const nombre = input.nombre.value
-        event.preventDefault();
+
         productos.push({
             nombre: nombre,
             precios: preciosVenta,
@@ -92,6 +84,15 @@ const AddProducto = function ({ state }) {
         state(false);
     }
 
+    useEffect(() => {
+        const tmpLista = ingredientes.map(({ nombre, costo }) => {
+            const nombreIngrediente = nombre.split(" ").join('');
+            return { nombre: nombreIngrediente, cantidad: 0, costo: Number(costo) }
+        });
+        setListaIngredientes(tmpLista)
+    }, []);
+
+
     return (
         // Form para agregar un nuevo producto
         <div className='fixed flex justify-center w-full h-screen bg-gray-600/50'>
@@ -100,7 +101,7 @@ const AddProducto = function ({ state }) {
                 <section className={`transition-transform duration-700 ${showStep} flex flex-col min-w-fit mt-6`}>
 
                     <label htmlFor="" className="my-2">Nombre del producto</label>
-                    <input name='nombre' type="text" className="mx-2 border border-blackH rounded-md text-center" placeholder="Original 300 gr" autoComplete='off' />
+                    <input name='nombre' type="text" className="mx-2 border border-blackH rounded-md text-center" placeholder="Original 300 gr" autoComplete='off' defaultValue={form.nombre} />
 
                     <label htmlFor="" className="mt-2">Precio a vender</label>
                     <div className="table  overflow-hidden mx-2 border border-blackH rounded-md">
@@ -111,15 +112,15 @@ const AddProducto = function ({ state }) {
                                 <div className="table-cell bg-blueH text-white"> Final </div>
                             </div>
                             <div className="table-row grid grid-cols-3" onChange={calculoGanancia} >
-                                <input name='precioTercero' type="Number" className="precio-a-vender border-r border-blackH outline-none text-center" placeholder="100.00" />
-                                <input name='precioTienda' type="Number" className="precio-a-vender border-r border-blackH outline-none text-center" placeholder="100.00" />
-                                <input name='precioFinal' type="Number" className="precio-a-vender outline-none text-center" placeholder="100.00" />
+                                <input defaultValue={form.precios[0]} name='precioTercero' type="Number" className="precio-a-vender border-r border-blackH outline-none text-center" placeholder="100.00" />
+                                <input defaultValue={form.precios[1]} name='precioTienda' type="Number" className="precio-a-vender border-r border-blackH outline-none text-center" placeholder="100.00" />
+                                <input defaultValue={form.precios[2]} name='precioFinal' type="Number" className="precio-a-vender outline-none text-center" placeholder="100.00" />
                             </div>
                             <div className="grid grid-cols-3">
                                 <label className="col-span-2 border-blackH bg-blackH text-white">% Para gastos fijos</label>
-                                <input name='porcentajeFijos' id='porcentajeFijos' type="Number" className="col-span-1 outline-none border-t border-blackH text-center" placeholder="30" onChange={(e) => { setPorcentajeFijos(Number(e.target.value)); }} />
+                                <input defaultValue={form.gastosFijos} name='porcentajeFijos' id='porcentajeFijos' type="Number" className="col-span-1 outline-none border-t border-blackH text-center" placeholder="30" onChange={(e) => { setPorcentajeFijos(Number(e.target.value)); }} />
                                 <label className="col-span-2 border-blackH bg-blackH text-white">En almacen</label>
-                                <input name='almacen' type="Number" className="almacen col-span-1 outline-none border-t border-blackH text-center" placeholder="80" />
+                                <input defaultValue={form.almacen} name='almacen' type="Number" className="almacen col-span-1 outline-none border-t border-blackH text-center" placeholder="80" />
                             </div>
                         </div>
                     </div>
@@ -171,10 +172,11 @@ const AddProducto = function ({ state }) {
                             {
                                 ingredientes.map(({ nombre, unidad }) => {
                                     const nombreIngrediente = nombre.split(" ").join('');
+                                    const cantidadIngrediente = receta.filter((producto) => producto.nombre === nombreIngrediente)[0];
                                     return (
                                         <div className="table-row grid grid-cols-10 even:bg-gray-200 odd:bg-gray-100" key={nombre}>
                                             <div className="table-cell col-span-5 border-r border-blackH">{nombre}</div>
-                                            <input name={nombreIngrediente} type="number" className='materiaPrima table-cell col-span-3 border-r outline-none bg-transparent border-blackH text-center' placeholder="0" onChange={(e) => costoTotal(e)} />
+                                            <input defaultValue={cantidadIngrediente ? cantidadIngrediente.cantidad : ''} name={nombreIngrediente} type="number" className='materiaPrima table-cell col-span-3 border-r outline-none bg-transparent border-blackH text-center' placeholder="0" onChange={(e) => costoTotal(e)} />
                                             <div className="table-cell place-content-center col-span-2 border-r border-blackH">{unidad}</div>
                                         </div>
                                     )
